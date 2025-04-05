@@ -1,0 +1,6 @@
+.venv
+instance
+important.txt
+__pycache__
+*.pyc
+.DS_Store
