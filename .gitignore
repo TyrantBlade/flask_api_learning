@@ -1,4 +1,5 @@
 .venv
+.env
 instance
 important.txt
 __pycache__
