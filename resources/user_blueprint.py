@@ -7,10 +7,27 @@ from blocklist import BLOCKLIST
 from db import db
 from sqlalchemy.exc import SQLAlchemyError
 
+import os, requests
+from sqlalchemy import or_
+
 from models import UserModel
-from schemas import UserSchema
+from schemas import UserSchema, RegisterUserSchema
 
 blueprint = Blueprint("users",__name__,description="Operation on users")
+
+def send_simple_message(to, object, body):
+    domain = os.getenv("MAILGUN_DOMAIN")
+    api = os.getenv("MAILGUN_API_KEY")
+    
+    return requests.post(
+  		f"https://api.mailgun.net/v3/{domain}/messages",
+  		auth=("api", api),
+  		data={"from": f"Mailgun Sandbox <postmaster@{domain}>",
+			"to": [to],
+  			"subject": object,
+  			"text": body
+        }
+    )
 
 @blueprint.route("/user/<int:user_id>")
 class User(MethodView):
@@ -36,20 +53,31 @@ class User(MethodView):
 @blueprint.route("/register")
 class UserRegister(MethodView):
 
-    @blueprint.arguments(UserSchema)
-    @blueprint.response(201, UserSchema)
+    @blueprint.arguments(RegisterUserSchema)
+    @blueprint.response(201, RegisterUserSchema)
     def post(self, user_data):
-        if UserModel.query.filter(UserModel.username == user_data["username"]).first():
-            abort(409, message="Username already exist in the system.Try another one.")
+        if UserModel.query.filter(
+            or_(
+                UserModel.username == user_data["username"],
+                UserModel.email == user_data["email"])
+            ).first():
+            abort(409, message="Username or email already exist in the system.Try another one.")
 
         user = UserModel(
             username=user_data["username"],
+            email=user_data["email"],
             password=pbkdf2_sha256.hash(user_data["password"]))
         
         try:
             db.session.add(user)
             db.session.commit()
             
+            send_simple_message(
+                to=user.email,
+                object="User registration",
+                body=f"You have succesfully registered {user.username} to our database API."
+            )
+
             return user        
         except SQLAlchemyError:
             abort(500, message = "Error while creating user")
