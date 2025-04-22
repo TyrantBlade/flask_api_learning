@@ -11,7 +11,7 @@ import os, requests
 from sqlalchemy import or_
 
 from models import UserModel
-from schemas import UserSchema, RegisterUserSchema
+from marshmallow_schema.schemas import UserSchema, RegisterUserSchema
 
 blueprint = Blueprint("users",__name__,description="Operation on users")
 

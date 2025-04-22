@@ -9,10 +9,10 @@ from db import db
 from blocklist import BLOCKLIST
 import models
 
-from resources.item_blueprint import blueprint as ItemBlueprint
-from resources.store_blueprint import blueprint as StoreBlueprint
-from resources.tag_blueprint import blueprint as TagBlueprint
-from resources.user_blueprint import blueprint as UserBlueprint
+from api_resources.item_blueprint import blueprint as ItemBlueprint
+from api_resources.store_blueprint import blueprint as StoreBlueprint
+from api_resources.tag_blueprint import blueprint as TagBlueprint
+from api_resources.user_blueprint import blueprint as UserBlueprint
 
 
 def create_app(db_url=None):

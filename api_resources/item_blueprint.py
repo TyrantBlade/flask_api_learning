@@ -6,7 +6,7 @@ from flask_jwt_extended import get_jwt, jwt_required
 from sqlalchemy.exc import SQLAlchemyError
 
 from models import ItemModel
-from schemas import ItemSchema, ItemUpdateSchema
+from marshmallow_schema.schemas import ItemSchema, ItemUpdateSchema
 
 blueprint = Blueprint("items",__name__,description = "Operations on items")
 

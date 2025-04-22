@@ -6,7 +6,7 @@ from db import db
 from sqlalchemy.exc import SQLAlchemyError
 
 from models import TagModel, StoreModel, ItemModel
-from schemas import TagSchema, TagsAndItemsSchema
+from marshmallow_schema.schemas import TagSchema, TagsAndItemsSchema
 
 blueprint = Blueprint("tags",__name__,description="Operation on tags")
 

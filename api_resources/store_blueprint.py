@@ -5,7 +5,7 @@ from flask_smorest import Blueprint, abort
 from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
-from schemas import StoreSchema
+from marshmallow_schema.schemas import StoreSchema
 from models import StoreModel
 
 blueprint = Blueprint("stores",__name__,description = "Operations on stores")
